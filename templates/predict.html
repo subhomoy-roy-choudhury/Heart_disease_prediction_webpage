@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block main %}
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Prediction Results</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h5>Prediction Input:</h5>
+                <div>AGE: <span id="age"></span></div>
+                <div>SEX: <span id="sex"></span></div>
+                <div>chest pain type: <span id="cp"></span></div>
+                <div>resting blood pressure: <span id="trestbps"></span></div>
+                <div> serum cholestoral in mg/dl: <span id="chol"></span></div>
+                <div>fasting blood sugar > 120 mg/dl: <span id="fbs"></span></div>
+                <div>resting electrocardiographic results (values 0,1,2): <span id="restecg"></span></div>
+                <div>maximum heart rate achieved: <span id="thalach"></span></div>
+                <div>exercise induced angina: <span id="exang"></span></div>
+                <div>oldpeak = ST depression induced by exercise relative to rest: <span id="oldpeak"></span></div>
+                <div>the slope of the peak exercise ST segment: <span id="slope"></span></div>
+                <div>number of major vessels (0-3) colored by flourosopy: <span id="ca"></span></div>
+                <div>thal: (3 = normal; 6 = fixed defect; 7 = reversable defect) <span id="thal"></span></div>
+                <h5 class="pt-3">Prediction Classification:</h5>
+                <div id="prediction"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a class="btn btn-primary" href="/results" role="button">View DB</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container pt-5">
+    <div class="row justify-content-md-center">
+        <div class="col-md-4">
+            <h1>Iris Prediction</h1>
+            <form method="post" id="post-form">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="age">AGE</label>
+                    <input type="number" step="0.1" class="form-control" id="age" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="sex">SEX</label>
+                    <input type="number" step="0.1" class="form-control" id="sex" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="cp">cp</label>
+                    <input type="number" step="0.1" class="form-control" id="cp" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="trestbps">trestbps</label>
+                    <input type="number" step="0.1" class="form-control" id="trestbps" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="chol">chol</label>
+                    <input type="number" step="0.1" class="form-control" id="chol" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="fbs">fbs</label>
+                    <input type="number" step="0.1" class="form-control" id="fbs" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="restecg">restecg</label>
+                    <input type="number" step="0.1" class="form-control" id="restecg" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="thalach">thalach</label>
+                    <input type="number" step="0.1" class="form-control" id="thalach" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="exang">exang</label>
+                    <input type="number" step="0.1" class="form-control" id="exang" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="oldpeak">oldpeak</label>
+                    <input type="number" step="0.1" class="form-control" id="oldpeak" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="slope">slope</label>
+                    <input type="number" step="0.1" class="form-control" id="slope" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="ca">ca</label>
+                    <input type="number" step="0.1" class="form-control" id="ca" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="thal">thal</label>
+                    <input type="number" step="0.1" class="form-control" id="thal" placeholder="" required>
+                </div>
+                <button type="submit" value="Submit" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).on('submit', '#post-form',function(e){
+        e.preventDefault();
+        $.ajax({
+            type:'POST',
+            url:'{% url "predict:submit_prediction" %}',
+            data:{
+                age:$('#age').val(),
+                sex:$('#sex').val(),
+                cp:$('#cp').val(),
+                trestbps:$('#trestbps').val(),
+                chol:$('#chol').val(),
+                fbs:$('#fbs').val(),
+                restecg:$('#restecg').val(),
+                thalach:$('#thalach').val(),
+                exang:$('#exang').val(),
+                oldpeak:$('#oldpeak').val(),
+                slope:$('#slope').val(),
+                ca:$('#ca').val(),
+                thal:$('#thal').val(),
+                csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                action: 'post'
+            },
+            success:function(json) {
+                document.forms["post-form"].reset();
+                document.getElementById("prediction").innerHTML = json['result']
+                document.getElementById("age").innerHTML = json['age']
+                document.getElementById("sex").innerHTML = json['sex']
+                document.getElementById("cp").innerHTML = json['cp']
+                document.getElementById("trestbps").innerHTML = json['trestbps']
+                document.getElementById("chol").innerHTML = json['chol']
+                document.getElementById("fbs").innerHTML = json['fbs']
+                document.getElementById("restecg").innerHTML = json['restecg']
+                document.getElementById("thalach").innerHTML = json['thalach']
+                document.getElementById("exang").innerHTML = json['exang']
+                document.getElementById("oldpeak").innerHTML = json['oldpeak']
+                document.getElementById("slope").innerHTML = json['slope']
+                document.getElementById("ca").innerHTML = json['ca']
+                document.getElementById("thal").innerHTML = json['thal']
+            },
+            error : function(xhr,errmsg,err) {
+
+            }
+        });
+    })
+</script>
+
+{% endblock %}
+

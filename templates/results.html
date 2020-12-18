@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block main %}
+    <div class="container pt-5">
+        <div class="row">
+
+        <h1>Prediction Results</h1>
+
+            <table class="table">
+                <thead>
+                <tr>
+                <th scope="col">#</th>
+                <th scope="col">age</th>
+                <th scope="col">sex</th>
+                <th scope="col">cp</th>
+                <th scope="col">trestbps</th>
+                <th scope="col">chol</th>
+                <th scope="col">fbs</th>
+                <th scope="col">restecg</th>
+                <th scope="col">thalach</th>
+                <th scope="col">exang</th>
+                <th scope="col">oldpeak</th>
+                <th scope="col">slope</th>
+                <th scope="col">ca</th>
+                <th scope="col">thal</th>
+                <th scope="col">Prediction</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for data in dataset %}
+                    <tr>
+                    <th scope="row">{{ data.id }}</th>
+                    <td>{{ data.age }}</td>
+                    <td>{{ data.sex }}</td>
+                    <td>{{ data.cp }}</td>
+                    <td>{{ data.trestbps }}</td>
+                    <td>{{ data.chol }}</td>
+                    <td>{{ data.fbs }}</td>
+                    <td>{{ data.restecg }}</td>
+                    <td>{{ data.thalach }}</td>
+                    <td>{{ data.exang }}</td>
+                    <td>{{ data.oldpeak }}</td>
+                    <td>{{ data.slope }}</td>
+                    <td>{{ data.ca }}</td>
+                    <td>{{ data.thal }}</td>
+                    <td>{{ data.target }}</td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
