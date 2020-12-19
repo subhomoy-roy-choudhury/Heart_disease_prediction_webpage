@@ -15,20 +15,20 @@ class PredResults(models.Model):
 
 class PredResults2(models.Model):
 
-    age = models.FloatField()
-    sex = models.FloatField()
-    cp = models.FloatField()
-    trestbps = models.FloatField()
-    chol = models.FloatField()
-    fbs = models.FloatField()
-    restecg = models.FloatField()
-    thalach = models.FloatField()
-    exang = models.FloatField()
-    oldpeak = models.FloatField()
-    slope = models.FloatField()
-    ca = models.FloatField()
-    thal = models.FloatField()
-    target = models.FloatField()
+    age = models.IntegerField()
+    sex = models.IntegerField()
+    cp = models.IntegerField()
+    trestbps = models.IntegerField()
+    chol = models.IntegerField()
+    fbs = models.IntegerField()
+    restecg = models.IntegerField()
+    thalach = models.IntegerField()
+    exang = models.IntegerField()
+    oldpeak = models.IntegerField()
+    slope = models.IntegerField()
+    ca = models.IntegerField()
+    thal = models.IntegerField()
+    target = models.IntegerField()
     
     def __str__(self):
         return self.target
